@@ -1,0 +1,5 @@
+Python is a high-level programming language.
+
+Python supports Object-Oriented Programming.
+
+Python is widely used in Artificial Intelligence and Machine Learning.
