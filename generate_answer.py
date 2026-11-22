@@ -1,4 +1,5 @@
-
+import time
+from google.genai import errors
 import os
 import chromadb
 from sentence_transformers import SentenceTransformer
@@ -113,10 +114,33 @@ ANSWER:
 
 print("\nGenerating answer with Gemini...")
 
-response = gemini_client.interactions.create(
-    model="gemini-4-hydrogen",
-    input=prompt
-)
+
+max_retries = 3
+
+for attempt in range(max_retries):
+    try:
+        print(f"Gemini API attempt {attempt + 1}/{max_retries}")
+
+        response = gemini_client.interactions.create(
+            model="gemini-3.8-flash",
+            input=prompt
+        )
+
+        print("Gemini response received successfully!")
+        break
+
+    except Exception as e:
+        print(f"API request failed: {e}")
+
+        if attempt < max_retries - 1:
+            wait_time = 2 ** (attempt + 1)
+
+            print(f"Retrying in {wait_time} seconds...")
+            time.sleep(wait_time)
+        else:
+            print("Gemini API failed after all retries.")
+            raise
+
 
 # ==================================
 # STEP 11: Display final answer
