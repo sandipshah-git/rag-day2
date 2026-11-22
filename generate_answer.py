@@ -44,7 +44,7 @@ embedding_model = SentenceTransformer(
 # STEP 5: Ask a question
 # ==================================
 
-question = "Why did Alice follow the White Rabbit?"
+question = "What happened when Alice fell down the rabbit hole?"
 
 # ==================================
 # STEP 6: Generate question embedding
@@ -115,15 +115,16 @@ ANSWER:
 print("\nGenerating answer with Gemini...")
 
 
-max_retries = 3
+max_retries = 2
 
 for attempt in range(max_retries):
     try:
         print(f"Gemini API attempt {attempt + 1}/{max_retries}")
 
         response = gemini_client.interactions.create(
-            model="gemini-3.8-flash",
-            input=prompt
+            model="gemini-3.5-flash-lite",
+            input=prompt,
+            timeout=50
         )
 
         print("Gemini response received successfully!")
@@ -146,8 +147,12 @@ for attempt in range(max_retries):
 # STEP 11: Display final answer
 # ==================================
 
-print("\n========== RAG CHATBOT ANSWER ==========\n")
+print("\n========== RAG CHATBOT RESPONSE ==========\n")
 
+print("QUESTION :- ")
+print(question)
+
+print("\nANSWER:")
 print(response.output_text)
 
 print("\n========== RETRIEVED SOURCES ==========\n")
